@@ -243,7 +243,7 @@ class Mininet_xia( Mininet ):
 			node.setHID(hid=hid)
 		
 
-    def addParameters(self,node,params):
+    def addParameters( self, node, params ):
 	""" add parameters"""
 	
 	if 'hid' in params:
@@ -253,11 +253,11 @@ class Mininet_xia( Mininet ):
 			node.params['hid'].append(hid)
 
     def addXia( self, name, cls=None, **params ):
-        """Add host.
-           name: name of host to add
-           cls: custom host class/constructor (optional)
+        """Add XIA host.
+           name: name of XIA host to add
+           cls: custom XIA host class/constructor (optional)
            params: parameters for host
-           returns: added host"""
+           returns: added XIA host"""
         # Default IP and MAC addresses
         defaults = { 'ip': ipAdd( self.nextIP,
                                   ipBaseNum=self.ipBaseNum,
@@ -272,6 +272,7 @@ class Mininet_xia( Mininet ):
         defaults.update( params )
         if not cls:
             cls = self.xia
+	# Requires some work, XID information being carried to Node_XIA for no reason! 
         xia = cls( name, **defaults )
 	self.addParameters( xia, defaults)
         self.xias.append( xia )

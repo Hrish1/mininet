@@ -18,14 +18,12 @@ def topology():
 	xia3 = net.addXia('xia3' )
 	net.addLink( xia1 , xia2 )
 	net.addLink( xia1 , xia3 )
-	if xia1 == None:
-		info("*** no node allocated\n")
-		return
+	
 	
 	info("*** starting network \n")
 	net.build()
 
-	info("*** running cli\n")
+	
 	CLI(net)
 
 	info("*** stopping network\n")
