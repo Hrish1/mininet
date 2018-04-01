@@ -8,5 +8,7 @@ You will find the installation steps for Linux-XIA [over here](https://github.co
 
 After completing the installation you are ready to have the topology started. Load the HID principal
 and run the python script xia.py as root user.
-
-$ sudo python xia.py
+ 
+```shell 
+  $ sudo python xia.py
+```
