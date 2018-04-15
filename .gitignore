@@ -1,5 +1,6 @@
 mnexec
 *.pyc
+*.graphml
 *~
 *.1
 *.xcodeproj
