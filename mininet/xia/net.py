@@ -241,7 +241,9 @@ class Mininet_xia( Mininet ):
 		if 'hid' in node.params:
 			hid = node.params['hid']
 			node.setHID(hid=hid)
-		
+        	if 'ethid' in node.params:
+			ethid = node.params['ethid']
+			node.setEthID(ethid=ethid)
 
     def addParameters( self, node, params ):
 	""" add parameters"""
@@ -251,6 +253,11 @@ class Mininet_xia( Mininet ):
 		hid_list = params['hid'].split(',')
 		for hid in hid_list:
 			node.params['hid'].append(hid)
+	if 'ethid' in params:
+		node.params['ethid'] = []
+		intf_list = params['ethid'].split(',')
+		for intf in intf_list:
+			node.params['ethid'].append(intf)
 
     def addXia( self, name, cls=None, **params ):
         """Add XIA host.

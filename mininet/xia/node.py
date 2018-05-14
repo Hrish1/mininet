@@ -474,6 +474,10 @@ class Node_xia(Node):
 		self.cmd('xip hid getpub',p)
 		self.cmd('xip hid addaddr',p)
 
+    def setEthID( self, ethid=None ):
+	for intf in ethid:
+		self.cmd('xip ether addif %s-%s' % (self.__str__(), intf) )
+
     def setIP( self, ip, prefixLen=8, intf=None, **kwargs ):
         """Set the IP address for an interface.
            intf: intf or intf name

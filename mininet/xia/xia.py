@@ -13,7 +13,7 @@ def topology():
 
 	info("*** creating nodes\n")
 
-	xia1 = net.addXia('xia1', hid= 'a,b' )
+	xia1 = net.addXia('xia1', hid= 'a,b' , ethid='eth0, eth1')
 	xia2 = net.addXia('xia2' )
 	xia3 = net.addXia('xia3' )
 	net.addLink( xia1 , xia2 )
