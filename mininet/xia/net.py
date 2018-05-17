@@ -257,6 +257,7 @@ class Mininet_xia( Mininet ):
 		node.params['ethid'] = []
 		intf_list = params['ethid'].split(',')
 		for intf in intf_list:
+			intf = intf.lstrip()
 			node.params['ethid'].append(intf)
 
     def addXia( self, name, cls=None, **params ):
