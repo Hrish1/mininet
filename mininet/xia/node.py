@@ -469,14 +469,20 @@ class Node_xia(Node):
         return self.intf( intf ).setMAC( mac )
 
     def setHID( self, hid=None):
+	""	
+	if not self.isLoaded('xia_ppal_hid'):
+		self.cmd('modprobe xia_ppal_hid')
 	for p in hid:
 		self.cmd('xip hid new',p)
 		self.cmd('xip hid getpub',p)
 		self.cmd('xip hid addaddr',p)
 
     def setEthID( self, ethid=None ):
+	""
+	if not self.isLoaded('xia_ppal_ether'):
+		self.cmd('modprobe xia_ppal_ether')	
 	for intf in ethid:
-		self.cmd('xip ether addif %s-%s' % (self.__str__(), intf) )
+		self.cmd('xip ether addif %s-%s' %(self.__str__(), intf) )
 
     def setIP( self, ip, prefixLen=8, intf=None, **kwargs ):
         """Set the IP address for an interface.
@@ -575,6 +581,13 @@ class Node_xia(Node):
     def __str__( self ):
         "Abbreviated string representation"
         return self.name
+
+    def isLoaded( self, module ):
+	"Check if the input module is loaded"
+	modules = self.popen("lsmod")
+	modules,error = modules.communicate()
+	return (True if modules.find(module) > 0 else False)
+		
 
     # Automatic class setup support
 
