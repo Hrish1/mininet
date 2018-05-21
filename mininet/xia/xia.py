@@ -12,8 +12,8 @@ def topology():
 	net = Mininet_xia(controller=None)
 
 	info("*** creating nodes\n")
-
-	xia1 = net.addXia('xia1', hid= 'a,b' , ethid='  eth0,    eth1')
+	HID = 'ffffffffffddddddcdcd2342167289f897f74893'
+	xia1 = net.addXia('xia1', hid= 'a,b' , ethid='  eth0,    eth1', hidneigh={'ppalid':HID, 'intf':'eth0'})
 	xia2 = net.addXia('xia2' )
 	xia3 = net.addXia('xia3' )
 	net.addLink( xia1 , xia2 )

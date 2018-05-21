@@ -477,6 +477,13 @@ class Node_xia(Node):
 		self.cmd('xip hid getpub',p)
 		self.cmd('xip hid addaddr',p)
 
+    def setHidNeigh( self, ppalid, intf):
+	""
+	intfName = '%s-%s' %(self.__str__(), intf)
+	lladdr = self.MAC(intfName)
+	self.cmd('xip hid addneigh',ppalid,' lladdr',lladdr,' dev',intfName )
+
+
     def setEthID( self, ethid=None ):
 	""
 	if not self.isLoaded('xia_ppal_ether'):
