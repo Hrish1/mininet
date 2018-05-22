@@ -6,9 +6,15 @@
 
 You will find the installation steps for Linux-XIA [over here](https://github.com/AltraMayor/XIA-for-Linux/wiki/How-to-install)
 
-After completing the installation you are ready to have the topology started. Load the HID principal
-and run the python script xia.py as root user.
+After completing the installation you are ready to have the topology started. Run the python script xia.py as root user.
  
 ```shell 
   $ sudo python xia.py
+```
+ You can use the respective xia commands to check if the configurations are done but in the same old mininet way. 
+
+
+**An example command**
+```shell 
+  mininet> xia1 xip hid showaddrs
 ```
