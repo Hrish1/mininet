@@ -487,12 +487,12 @@ class Node_xia(Node):
 			self.cmd('xip hid addneigh',ppalid,' lladdr',lladdr,' dev',intfName )
 		else: 
 			#pass
-			info('***Log from ', self.__str__(),' ***\n')
+			#info('***Log from ', self.__str__(),' ***\n')
 			self.cmdPrint('xip hid addneigh',ppalid,' lladdr',lladdr,' dev',intfName)
 	except ValueError:
 		
 		#pass
-		info('***Log from ', self.__str__(),' ***\n')
+		#info('***Log from ', self.__str__(),' ***\n')
 		self.cmdPrint('xip hid addneigh',ppalid,' lladdr',lladdr,' dev',intfName)
 
     def setEthID( self, ethid=None ):
