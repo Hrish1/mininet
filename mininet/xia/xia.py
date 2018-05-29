@@ -12,10 +12,10 @@ def topology():
 	net = Mininet_xia(controller=None)
 
 	info("*** creating nodes\n")
-	HID = '7ac27f90663ef36da12cfcc37c9a6bb6b85dec96'
+	HID = '7ac27f90663ef36da12cfcc37c9a6bb6b8dcdfcd'
 	xia1 = net.addXia('xia1', hid= 'a,b' , ethid='  eth0,    eth1')
-	xia2 = net.addXia('xia2', hidneigh={'ppalid':HID, 'intf':'eth0'} )
-	xia3 = net.addXia('xia3' )
+	xia2 = net.addXia('xia2', mainRoute={'dstPpal':'ad', 'dstXid':HID, 'gwPpal':'hid', 'gwXid':HID} )
+	xia3 = net.addXia('xia3', lpm={'lpmid':'192.168.3.56', 'prefixLen':23} )
 	net.addLink( xia1 , xia2 )
 	net.addLink( xia1 , xia3 )
 	

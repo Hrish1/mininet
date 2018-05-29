@@ -501,6 +501,41 @@ class Node_xia(Node):
 		self.cmd('modprobe xia_ppal_ether')	
 	for intf in ethid:
 		self.cmd('xip ether addif %s-%s' %(self.__str__(), intf) )
+    
+    def setLPM( self, lpmid=None, prefixLen=None):
+	""
+	if not self.isLoaded('xia_ppal_lpm'):
+		self.cmd('modprobe xia_ppal_lpm')
+	try:
+		int(lpmid, 16)
+		if len(lpmid) <= 160 and prefixLen <=160: 
+			self.cmd('xip lpm addlocal %s %d' %('0x' + lpmid, prefixLen))
+
+		else: 
+			self.cmdPrint('xip lpm addlocal %s %d' %(lpmid, prefixLen))
+	
+	except ValueError:
+		
+		if lpmid.count('.') == 3 and prefixLen <= 160:
+			octets = lpmid.split('.')
+			
+			if  len(list(octet for octet in octets if int(octet) in range(0,256))) == 4:
+				self.cmd('xip lpm addlocal %s %d' %(lpmid, prefixLen))
+			else:
+				self.cmdPrint('xip lpm addlocal %s %d' %(lpmid, prefixLen))
+				
+		else:
+			self.cmdPrint('xip lpm addlocal %s %d' %(lpmid, prefixLen))
+
+    def setMain(self, dstPpal, dstXid, gwPpal , gwXid):
+	""
+	dstPpal = dstPpal.lstrip()
+	if not self.isLoaded('xia_ppal_%s' %(dstPpal)):
+		
+		self.cmd('modprobe xia_ppal_%s' %(dstPpal))
+
+	self.cmd('xip ',dstPpal,' addroute',dstXid,' gw %s-%s' %(gwPpal,gwXid))
+	
 
     def setIP( self, ip, prefixLen=8, intf=None, **kwargs ):
         """Set the IP address for an interface.

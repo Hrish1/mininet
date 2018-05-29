@@ -250,6 +250,18 @@ class Mininet_xia( Mininet ):
 			intf = intf.lstrip()
 			node.setHidNeigh(ppalid=ppalid, intf=intf)
 
+		if 'lpm' in node.params:
+			lpmid = node.params['lpm'].get('lpmid')
+			prefixLen = node.params['lpm'].get('prefixLen')
+			node.setLPM(lpmid=lpmid, prefixLen=prefixLen)
+
+		if 'mainRoute' in node.params:
+			dstPpal = node.params['mainRoute'].get('dstPpal')
+			dstXid  = node.params['mainRoute'].get('dstXid')
+			gwPpal  = node.params['mainRoute'].get('gwPpal') 
+			gwXid   = node.params['mainRoute'].get('gwXid')
+
+			node.setMain(dstPpal=dstPpal, dstXid=dstXid, gwPpal=gwPpal, gwXid=gwXid)
     def addParameters( self, node, params ):
 	""" add parameters"""
 	
@@ -268,6 +280,15 @@ class Mininet_xia( Mininet ):
 	if 'hidneigh' in params:
 		node.params['hidneigh'] = {}
 		node.params['hidneigh'].update(params['hidneigh'])
+
+	if 'lpm' in params:
+		node.params['lpm'] = {}
+		node.params['lpm'].update(params['lpm'])
+
+	if 'mainRoute' in params:
+		node.params['mainRoute'] = {}
+		node.params['mainRoute'].update(params['mainRoute'])
+
 
 
     def addXia( self, name, cls=None, **params ):
