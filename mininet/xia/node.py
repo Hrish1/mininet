@@ -535,7 +535,21 @@ class Node_xia(Node):
 		self.cmd('modprobe xia_ppal_%s' %(dstPpal))
 
 	self.cmd('xip ',dstPpal,' addroute',dstXid,' gw %s-%s' %(gwPpal,gwXid))
+
+    def setAD(self, ad):
+	""
+	if not self.isLoaded('xia_ppal_ad'):
+		self.cmd('modprobe xia_ppal_ad')
+		
+	try:
+		for ad_id in ad:
+			
+			self.cmd('xip ad addlocal',ad_id)
+		
 	
+	except ValueError:
+			
+		self.cmdPrint('xip ad addlocal',ad_id)
 
     def setIP( self, ip, prefixLen=8, intf=None, **kwargs ):
         """Set the IP address for an interface.

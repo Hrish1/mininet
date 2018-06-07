@@ -236,7 +236,7 @@ class Mininet_xia( Mininet ):
         return h
 
     def configureXianodes( self ):
-	"""" add configuration for XIA nodes """
+	" add configuration for XIA nodes "
 	for node in self.xias:
 		if 'hid' in node.params:
 			hid = node.params['hid']
@@ -260,8 +260,15 @@ class Mininet_xia( Mininet ):
 			dstXid  = node.params['mainRoute'].get('dstXid')
 			gwPpal  = node.params['mainRoute'].get('gwPpal') 
 			gwXid   = node.params['mainRoute'].get('gwXid')
-
 			node.setMain(dstPpal=dstPpal, dstXid=dstXid, gwPpal=gwPpal, gwXid=gwXid)
+
+		if 'ad' in node.params:
+
+			ad = node.params['ad']
+			node.setAD(ad=ad)
+
+
+
     def addParameters( self, node, params ):
 	""" add parameters"""
 	
@@ -289,7 +296,13 @@ class Mininet_xia( Mininet ):
 		node.params['mainRoute'] = {}
 		node.params['mainRoute'].update(params['mainRoute'])
 
-
+	if 'ad' in params:
+		node.params['ad'] = []
+		ad_list = params['ad'].split(',')
+		for ad in ad_list:
+			ad = ad.lstrip()
+			node.params['ad'].append(ad)
+		
 
     def addXia( self, name, cls=None, **params ):
         """Add XIA host.
