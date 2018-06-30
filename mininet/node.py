@@ -839,6 +839,51 @@ class CPULimitedHost( Host ):
         cls.inited = True
 
 
+class XIAHost( Host ):
+    "eXpressive Internet Architecture host"
+
+    def __init__( self, name, **kwargs ):
+        pathCheck( 'xip', moduleName='XIA' )
+        Node.__init__( self, name, **kwargs )
+        self.xids = {}  # mapping of configurable inputs to XID types
+
+    def config( self, hid=None, xdp=False, **params):
+        """hid: private key file names for Host Identifiers, eg. hid='pk1,pk2'
+           xdp: set True to load the xdp module
+           params: parameters for Node.config()"""
+        r = Node.config( self, **params )
+        if xdp is True:
+            moduleDeps( add='xia_ppal_xdp')
+        self.setParam( r, 'setHID', hid=hid )
+        return r
+
+    def setHID( self, hid=None ):
+        "Assign HID(s) to the node."
+        self.xids[ 'hid' ] = self.addParameters( hid )
+        # Load the required module
+        moduleDeps( add='xia_ppal_hid' )
+        # Performs actual HID configuration
+        for p in self.xids[ 'hid' ]:
+            self.cmd( 'xip hid new', p )
+            self.cmd( 'xip hid addaddr', p )
+
+    @staticmethod
+    def addParameters( xids ):
+        """Store the ',' separated xids as a list.
+           xids: string input for XID(s)"""
+        xidlist = []
+        xids = xids.split( ',' )
+        for xid in xids:
+            xidlist.append( xid )
+        return xidlist
+
+    def cleanup( self ):
+        "Unload the modules loaded by the principals."
+        moduleDeps( subtract='xia_ppal_hid' )
+        moduleDeps( subtract='xia_ppal_xdp' )
+        super( XIAHost, self ).cleanup()
+
+
 # Some important things to note:
 #
 # The "IP" address which setIP() assigns to the switch is not
