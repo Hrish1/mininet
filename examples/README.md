@@ -62,6 +62,11 @@ as the data network, by actually creating two Mininet objects.
 
 This example tests iperf bandwidth for varying CPU limits.
 
+#### echoxp.py:
+
+This example sets up a topology with 2 nodes, pre-configured with 
+HID to carry out echo server test.
+
 #### emptynet.py:
 
 This example demonstrates creating an empty network (i.e. with no
