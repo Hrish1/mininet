@@ -845,17 +845,30 @@ class XIAHost( Host ):
     def __init__( self, name, **kwargs ):
         pathCheck( 'xip', moduleName='XIA' )
         Node.__init__( self, name, **kwargs )
-        self.xids = {}  # mapping of configurable inputs to XID types
 
-    def config( self, hid=None, xdp=False, **params):
-        """hid: private key file names for Host Identifiers, eg. hid=[ 'pk1','pk2' ]
-           xdp: set True to load the xdp module.
-           params: parameters for Node.config()."""
+    def config( self, ad=None, hid=None, lpm=None,
+                u4id=None, zfid=None, xdp=False, **params ):
+        """hid: private key file names for Host Identifiers.
+           zfid: zFilter identifier.
+           xdp: set True to load the xdp module
+           params: parameters for Node.config()"""
         r = Node.config( self, **params )
         if xdp is True:
             moduleDeps( add='xia_ppal_xdp' )
+        self.setParam( r, 'setAD', ad=ad )
         self.setParam( r, 'setHID', hid=hid )
+        self.setParam( r, 'setLPM' , lpm=lpm )
+        self.setParam( r, 'setU4ID', u4id=u4id )
+        self.setParam( r, 'setZFID', zfid=zfid )
         return r
+
+    def setAD( self, *ad ):
+        """Assign a host to Atonomous Domain.
+           Similar to BGP's Atonomous System.
+           ad:list of ad identifiers. """
+        moduleDeps( add='xia_ppal_ad' )
+        for a in ad:
+            self.cmd( 'xip ad addlocal', a )
 
     def setHID( self, *hid ):
         "Assign HID(s) to the node."
@@ -866,10 +879,55 @@ class XIAHost( Host ):
             self.cmd( 'xip hid new', p )
             self.cmd( 'xip hid addaddr', p )
 
+    def setLPM( self, **lpm ):
+        """Set routes with Longest Prefix Match
+           Extends CIDR abilities to XIA."""
+        moduleDeps( add='xia_ppal_lpm' )
+        lpmid = lpm.get( 'lpmid' )
+        prefixLen = lpm.get( 'prefixLen' )
+        if not isinstance( prefixLen, basestring ):
+            str( prefixLen )
+        if any( i is None for i in [ lpmid, prefixLen ] ):
+            return
+        self.cmd( 'xip lpm addlocal', lpmid, prefixLen )
+
+    def setU4ID( self, **u4id ):
+        "Create UDP socket for ip:port tuple"
+        moduleDeps( add='xia_ppal_u4id' )
+        intf = u4id.get( 'intf' )
+        port = u4id.get( 'port' )
+        tunnel = u4id.get( 'tunnel', False )
+        # UDP checksumming is set by default
+        checksum = u4id.get( 'checksum', True )
+        if any( i is None for i in [ intf, port ] ):
+            return
+        cmd = [ 'xip u4id add' ]
+        if isinstance( intf, basestring ) and '.' in intf:
+            cmd.append( intf )
+        else:
+            intfName = '%s-%s' %( self.__str__(), intf )
+            intf = self.IP( intfName )
+            cmd.append( intf )
+        cmd.append( port )
+        if tunnel is True:
+            cmd.append( '-tunnel' )
+        if checksum is False:
+            cmd.append( '-disable_checksum' )
+        cmd = ' '.join( cmd )
+        self.cmd( cmd )
+
+    def setZFID( self, *zfid ):
+        """Configure zFilter Identifier(s) for the host
+           zfid: A string of comma separated zFilter ID(s)"""
+        moduleDeps( add='xia_ppal_zf' )
+        for z in zfid:
+            if len( z ) == 40 and int( z, 2 ) > 0:
+                self.cmd( 'xip zf addlocal', z )
+
     def cleanup( self ):
         "Unload the modules loaded by the principals."
-        moduleDeps( subtract='xia_ppal_hid' )
-        moduleDeps( subtract='xia_ppal_xdp' )
+        moduleDeps( subtract=[ 'xia_ppal_ad', 'xia_ppal_hid', 'xia_ppal_lpm',
+                               'xia_ppal_u4id', 'xia_ppal_xdp', 'xia_ppal_zf' ] )
         super( XIAHost, self ).cleanup()
 
 
