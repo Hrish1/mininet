@@ -20,8 +20,8 @@ def topology():
     net = Mininet( controller=None )
 
     info( "*** creating nodes\n" )
-    xia1 = net.addHost( 'xia1', cls=XIAHost, hid='foo', xdp=True )
-    xia2 = net.addHost( 'xia2', cls=XIAHost, hid='bar', xdp=True )
+    xia1 = net.addHost( 'xia1', cls=XIAHost, hid=[ 'foo' ], xdp=True )
+    xia2 = net.addHost( 'xia2', cls=XIAHost, hid=[ 'bar' ], xdp=True )
 
     info("*** creating links\n")
     net.addLink( xia1, xia2 )
