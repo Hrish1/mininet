@@ -845,16 +845,17 @@ class XIAHost( Host ):
     def __init__( self, name, **kwargs ):
         pathCheck( 'xip', moduleName='XIA' )
         Node.__init__( self, name, **kwargs )
-        self.xids = {}  # mapping of configurable inputs to XID types
 
-    def config( self, hid=None, xdp=False, **params):
+    def config( self, hid=None, xdp=False, zfid=None, **params):
         """hid: private key file names for Host Identifiers, eg. hid=[ 'pk1','pk2' ]
            xdp: set True to load the xdp module.
+           zfid: zFilter identifier.
            params: parameters for Node.config()."""
         r = Node.config( self, **params )
         if xdp is True:
             moduleDeps( add='xia_ppal_xdp' )
         self.setParam( r, 'setHID', hid=hid )
+        self.setParam( r, 'setZFID', zfid=zfid )
         return r
 
     def setHID( self, *hid ):
@@ -866,10 +867,19 @@ class XIAHost( Host ):
             self.cmd( 'xip hid new', p )
             self.cmd( 'xip hid addaddr', p )
 
+    def setZFID( self, *zfid ):
+        """Configure zFilter Identifier(s) for the host
+           zfid: A list of zFilter IDs"""
+        moduleDeps( add='xia_ppal_zf' )
+        for z in zfid:
+            if len( z ) == 40 and int( z, 2 ) > 0:
+                self.cmd( 'xip zf addlocal', z )
+            else:
+                raise Exception( 'Not a valid zFilter ID %s' % ( z ) )
+
     def cleanup( self ):
         "Unload the modules loaded by the principals."
-        moduleDeps( subtract='xia_ppal_hid' )
-        moduleDeps( subtract='xia_ppal_xdp' )
+        moduleDeps( subtract= [ 'xia_ppal_hid', 'xia_ppal_xdp', 'xia_ppal_zf' ] )
         super( XIAHost, self ).cleanup()
 
 
