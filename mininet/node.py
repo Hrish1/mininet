@@ -18,6 +18,9 @@ Host: a virtual host. By default, a host is simply a shell; commands
 CPULimitedHost: a virtual host whose CPU bandwidth is limited by
     RT or CFS bandwidth limiting.
 
+XIAHost: (eXpressive Internet Architecture Host) a virtual host with
+    pre-configured XIDs(eXpressive Identifiers).
+
 Switch: superclass for switch nodes.
 
 UserSwitch: a switch using the user-space switch from the OpenFlow
