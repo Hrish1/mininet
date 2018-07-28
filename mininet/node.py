@@ -845,9 +845,8 @@ class XIAHost( Host ):
     def __init__( self, name, **kwargs ):
         pathCheck( 'xip', moduleName='XIA' )
         Node.__init__( self, name, **kwargs )
-        self.xids = {}  # mapping of configurable inputs to XID types
 
-    def config( self, hid=None, xdp=False, **params):
+    def config( self, ethid=None, hid=None, xdp=False, **params):
         """hid: private key file names for Host Identifiers, eg. hid=[ 'pk1','pk2' ]
            xdp: set True to load the xdp module.
            params: parameters for Node.config()."""
@@ -855,6 +854,7 @@ class XIAHost( Host ):
         if xdp is True:
             moduleDeps( add='xia_ppal_xdp' )
         self.setParam( r, 'setHID', hid=hid )
+        self.setParam( r, 'setEthID', ethid=ethid )
         return r
 
     def setHID( self, *hid ):
@@ -866,10 +866,17 @@ class XIAHost( Host ):
             self.cmd( 'xip hid new', p )
             self.cmd( 'xip hid addaddr', p )
 
+    def setEthID( self, *ethid ):
+        "Assign ether ID(s) to the node."
+        # Load the required module
+        moduleDeps( add='xia_ppal_ether' )
+        # Performs actual ether ID configuration
+        for intf in ethid:
+            self.intf( intf ).setEthID()
+
     def cleanup( self ):
         "Unload the modules loaded by the principals."
-        moduleDeps( subtract='xia_ppal_hid' )
-        moduleDeps( subtract='xia_ppal_xdp' )
+        moduleDeps( subtract=[ 'xia_ppal_ether', 'xia_ppal_hid', 'xia_ppal_xdp' ] )
         super( XIAHost, self ).cleanup()
 
 
