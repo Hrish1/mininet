@@ -1,10 +1,18 @@
 #!/usr/bin/python
 
+"""
+The example is aimed at demonstrating how the XIA hosts can communicate with each other
+over an existing ipv4 network. The U4ID principal creates UDP sockets that carry the XIP packet
+as UDP/IP payload.
+"""
+
 from mininet.net import Mininet
 from mininet.node import Host, XIAHost
 from mininet.nodelib import LinuxBridge
 from mininet.log import setLogLevel, info
 from mininet.cli import CLI
+
+# From mininet/examples/linuxrouter.py
 
 class LinuxRouter( Host ):
     "A Node with IP forwarding enabled."
@@ -34,7 +42,7 @@ def xiamultippal():
 
     xia1 = net.addHost( 'xia1', cls=XIAHost, ip='172.16.0.2/16', defaultRoute='via 172.16.0.1',
                         u4id={ 'ipaddr': '172.16.0.2', 'port': '0x52a3', 'tunnel': True }, xdp=True, hid=[ 'xia1_hid1' ] )
-    xia2 = net.addHost( 'xia2', cls=XIAHost, ip='172.16.0.3/16', defaultRoute='via 172.16.0.1' )
+    xia2 = net.addHost( 'xia2', cls=XIAHost, ip='172.16.0.3/16', defaultRoute='via 172.16.0.1', lpm=[ '172.16.0.0/16' ] )
     xia3 = net.addHost( 'xia3', cls=XIAHost, ip='192.168.100.2/24', defaultRoute='via 192.168.100.1',
                         u4id={ 'ipaddr': '192.168.100.2', 'port': '0x52a1', 'tunnel': True }, xdp=True, hid=[ 'xia3_hid1' ] )
 
