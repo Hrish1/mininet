@@ -101,7 +101,7 @@ class Intf( object ):
         """Set the ether ID for the interface.
            The ether principal is the only
            interface bound principal of XIA so far."""
-        return self.xip( 'ether', 'addif', '%s-%s' %( self.node, self.name ) )
+        return self.xip( 'ether', 'addif', '%s-%s' % ( self.node, self.name ) )
 
     def updateIP( self ):
         "Return updated IP address based on ifconfig"

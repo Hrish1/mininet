@@ -847,10 +847,11 @@ class XIAHost( Host ):
 
     def __init__( self, name, **kwargs ):
         pathCheck( 'xip', moduleName='XIA' )
-        Node.__init__( self, name, **kwargs )
+        Host.__init__( self, name, **kwargs )
 
     def config( self, ethid=None, hid=None, xdp=False, **params):
-        """hid: private key file names for Host Identifiers, eg. hid=[ 'pk1','pk2' ]
+        """hid: private key file names for Host Identifiers,
+           eg. hid=[ 'pk1','pk2' ]
            xdp: set True to load the xdp module.
            params: parameters for Node.config()."""
         r = Node.config( self, **params )
@@ -879,7 +880,8 @@ class XIAHost( Host ):
 
     def cleanup( self ):
         "Unload the modules loaded by the principals."
-        moduleDeps( subtract=[ 'xia_ppal_ether', 'xia_ppal_hid', 'xia_ppal_xdp' ] )
+        moduleDeps( subtract=[ 'xia_ppal_ether', 'xia_ppal_hid',
+                    'xia_ppal_xdp' ] )
         super( XIAHost, self ).cleanup()
 
 

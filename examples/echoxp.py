@@ -7,10 +7,8 @@ The client sends a text or a file to the server which is echoed
 back to the client.
 """
 
-import sys
 from mininet.log import setLogLevel, info
 from mininet.cli import CLI
-from mininet.link import Link
 from mininet.net import Mininet
 from mininet.node import XIAHost
 
