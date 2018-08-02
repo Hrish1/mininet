@@ -70,7 +70,7 @@ SWITCHES = { 'user': UserSwitch,
 HOSTDEF = 'proc'
 HOSTS = { 'proc': Host,
           'rt': specialClass( CPULimitedHost, defaults=dict( sched='rt' ) ),
-          'cfs': specialClass( CPULimitedHost, defaults=dict( sched='cfs' ) )
+          'cfs': specialClass( CPULimitedHost, defaults=dict( sched='cfs' ) ),
           'xia': XIAHost }
 
 CONTROLLERDEF = 'default'
